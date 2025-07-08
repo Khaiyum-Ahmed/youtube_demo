@@ -17,9 +17,21 @@ function timeCalculation(time){
 
 
 
+// sorting
+
+ // fetch the data
+    // fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?`)
+    //     .then((res) => res.json())
+    //     // .then(data => displayVideos(data.videos))
+    //     .then(data => console.log(data.videos[0].others.views))
+    //     .catch((error) => console.log(error));
 
 
 
+// const sortBtn = document.getElementById('sortBtn');
+
+//     const sortVideos = video;
+//     console.log(sortVideos)
 
 
 
@@ -44,16 +56,50 @@ const loadCategories = () => {
         .catch((error) => console.log(error));
 
 }
+// sorting
+
+
+
+
+let videoData = [];
+
+
+
 // create loadVideos
-const loadVideos = (searchText = '') => {
+const loadVideos = async (searchText = '') => {
 
     // fetch the data
-    fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`)
-        .then((res) => res.json())
-        .then(data => displayVideos(data.videos))
-        .catch((error) => console.log(error));
+  const res = await fetch(`https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`);
+        let data = await res.json();
+        displayVideos(data.videos);
+
+        // .then(data => displayVideos(data.videos))
+        // .then(data => console.log(data))
+        // .catch((error) => console.log(error));
+        videoData = data.videos;
+        // console.log(data.videos)
+        // sorting
+
+
+        console.log(videoData)
+
+       
+        
 
 }
+
+// sorting data
+
+const sortingData = ()=>{
+    const sorting = videoData.sort((a , b) => {
+        const sort1 = parseInt(a.others.views.replace(/[^\d]/g,""));
+        const sort2 = parseInt(b.others.views.replace(/[^\d]/g,""));
+        return sort2 - sort1
+    });
+    displayVideos(sorting);
+}
+
+
 
 const removeActiveClass = ()=>{
     const buttons = document.getElementsByClassName("category-btn");
@@ -90,6 +136,7 @@ const loadDetails = async (videoId)=>{
 const displayDetails = (video) =>{
     console.log(video);
     const detailContainer = document.getElementById('modal-content');
+
 
     detailContainer.innerHTML = `
         <img src = "${video.thumbnail}" />
